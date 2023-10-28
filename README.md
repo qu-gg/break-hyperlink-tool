@@ -1,5 +1,5 @@
 <h2 align='center'>Break!! Hyperlinking Tool</h2>
-<h3 align='center'>An automated tool to handle adding page links into the BREAK!! TTRPG sourcebook</h3>
+<h3 align='center'>An automated tool to handle adding page links<br> into the BREAK!! TTRPG sourcebook</h3>
 
 <a name="about"></a>
 ## About this Repository
