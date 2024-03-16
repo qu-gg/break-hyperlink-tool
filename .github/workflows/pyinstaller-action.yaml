@@ -1,4 +1,4 @@
-name: Build
+name: BuildProject
 on: [push]
 jobs:
   createrelease:
