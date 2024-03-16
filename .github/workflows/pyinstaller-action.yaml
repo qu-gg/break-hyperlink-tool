@@ -11,8 +11,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.1.5
-        release_name: Release v1.1.5
+        tag_name: v1.2
+        release_name: v1.2 - Mac Support!
         draft: false
         prerelease: false
     - name: Output Release URL File
@@ -36,12 +36,12 @@ jobs:
                 pyinstaller -F -w -n breakhyperlink break_hyperlink_gui.py &&
                 cd dist/ &&
                 zip -r9 breakhyperlink breakhyperlink.app/
-            OUT_FILE_NAME: breakhyperlink.zip
+            OUT_FILE_NAME: BreakHyperlink_mac.zip
             ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
             CMD_BUILD: pyinstaller -F -w -n breakhyperlink break_hyperlink_gui.py
-            OUT_FILE_NAME: breakhyperlink.exe
+            OUT_FILE_NAME: BreakHyperlink_windows.exe
             ASSET_MIME: application/vnd.microsoft.portable-executable
     steps:
     - uses: actions/checkout@v1
