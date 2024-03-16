@@ -1,3 +1,4 @@
 regex
 PyMuPDF
 PyQt5
+pyinstaller
