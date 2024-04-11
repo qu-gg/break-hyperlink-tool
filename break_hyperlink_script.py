@@ -242,10 +242,10 @@ def isExactMatch(page, term, clip, fullMatch=False, caseSensitive=False):
 
 if __name__ == '__main__':
     # Change these to your PDF file paths
-    PDF_PATH = "BREAK_BOOK_PDF_RGB.pdf"
-    PDF_SAVE_FILE = "BREAK_BOOK_PDF_RGB_HYPERLINKED"
+    PDF_PATH = "BREAK_BOOK_PDF_NOLINKS.pdf"
+    PDF_SAVE_FILE = "BREAK_BOOK_PDF_HYPERLINKED"
 
-    BLUE_HIGHLIGHT = False
+    BLUE_HIGHLIGHT = True
     if BLUE_HIGHLIGHT is True:
         PDF_SAVE_FILE += "_BLUEHIGHLIGHT"
 
@@ -253,6 +253,40 @@ if __name__ == '__main__':
 
     # Open up the PDF file
     doc = fitz.open(PDF_PATH)
+
+    # Remove all existing links
+    for page_idx, page in tqdm(enumerate(doc)):
+        links = page.get_links()
+        for link in links:
+            page.delete_link(link)
+
+    # Re-add breakrpg.com links
+    pattern = re.compile(r"www.breakrpg.com", re.IGNORECASE)
+    for page_idx, page in tqdm(enumerate(doc)):
+        # Extract the page text
+        text = page.get_text()
+
+        # Iterate over each found match in string, adding the link
+        r = pattern.search(text)
+        if r is None:
+            continue
+
+        # Get all instances of said text match
+        text_instance = page.search_for(r.string[r.start():r.end()])
+
+        # For each instance, add a hyperlink box to it
+        for inst in text_instance:
+            link = page.insert_link({
+                "kind": fitz.LINK_URI,
+                "uri": "https://www.breakrpg.com/",
+                "from": inst
+            })
+
+            # Optional blue color highlighting of the text, just uncomment # the next three lines
+            if BLUE_HIGHLIGHT is True:
+                highlight = page.add_highlight_annot(inst)
+                highlight.set_colors(stroke=[0.5, 1, 1])
+                highlight.update()
 
     """ Index/Appendix """
     apply_index((1, 3))
@@ -286,7 +320,7 @@ if __name__ == '__main__':
     """ Headers """
     HEADER_BOUNDS = fitz.Rect(0, 0, 500, 25)
     for header_name, page_ref, page_skip in zip(
-            [r"CHARACTER CREATION", r"PLAYING THE GAME", r"OUTER WORLD", r"GM’S GUIDE", r"ADVERSARIES", r"APPENDIX"],
+            [r"CHARACTER CREATION", r"PLAYING THE GAME", r"OUTER WORLD", r"GM’S GUIDE", r"ADVERSARIES", r"APPENDIx"],
             [8, 208, 296, 314, 354, 440],
             [10, None, None, None, 355, None]
     ):
@@ -572,9 +606,9 @@ if __name__ == '__main__':
     ]
 
     section_fourteen = [
-        ["Downtime \nActivities",    12],
-        ["Social Bonds",    15],
-        ["Reputations",    21]
+        ["Downtime \nActivities",    272],
+        ["Social Bonds",    278],
+        ["Reputations",    278]
     ]
 
     section_fifteen = [
